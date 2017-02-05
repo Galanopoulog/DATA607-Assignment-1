@@ -1,0 +1,39 @@
+---
+title: "Loading Data into a Data Frame"
+author: Georgia Galanopoulos
+date: February 5, 2017
+output: html_document
+---
+I have chosen to work with the Mushroom Data Set from the UCI Machine Learning Repository website for the problems below. This record was drawn from the Audubon Society Field Guide to North American Muschrooms and includes mushrooms' physical characteristics, including their classification as poisonous or edible.
+
+```{r}
+library(bitops)
+library(RCurl)
+
+# Reading data and changing column names for ease
+mushr_url = getURL("https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data")
+mushr = read.csv(text = mushr_url, header = F)
+names(mushr) = c("Class", "CapShape", "CapSurface",
+                 "CapColor", "Bruising", "Odor", "GillAttachment",
+                 "GillSpacing", "GillSize", "GillColor", "StalkShape",
+                 "StalkRoot", "HighStalk", "LowStalk", "ColorHigh",
+                 "ColorLow", "VeilType", "VeilColor", "RingNumber",
+                 "RingType", "SporeColor", "Population", "Habitat")
+head(mushr)
+```
+
+Below, I have created a dataframe that subsets the columns to include whether the mushrooms are edible or not, the cap shape, the texture of the caps' surface, the cap color, whether the mushroom is bruised and the mushrooms' habitat. The data abbreviations were changed in order to make the entries more understandable upon first glance.
+```{r}
+# Subsetting data
+sub_mushr = subset(mushr, select = c("Class", "CapShape", "CapSurface", "Bruising", "Habitat"))
+head(sub_mushr)
+
+# Data abbreviations changed for each column
+levels(sub_mushr$Class) = c("edible", "poisonous")
+levels(sub_mushr$CapShape) = c("bell", "conical", "flat", "knobbed", "sunken", "convex")
+levels(sub_mushr$CapSurface) = c("fibrous", "grooves", "smooth", "scaly")
+levels(sub_mushr$Bruising) = c("none", "bruising")
+levels(sub_mushr$Habitat) = c("woods", "grasses", "leaves", "meadows", "paths", "urban", "waste")
+head(sub_mushr)
+```
+
